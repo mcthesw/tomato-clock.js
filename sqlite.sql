@@ -11,8 +11,9 @@ CREATE TABLE UserData(
 CREATE TABLE Logs(
     TIME           TEXT   NOT NULL,
     NAME           TEXT   NOT NULL,
-    IP             INT    NOT NULL,
+    IP             TEXT   NOT NULL,
     OPERATION      TEXT   NOT NULL,
-    FLAG           INT
+    FLAG           INT,
+    MSG            TEXT
 );
 COMMIT;
