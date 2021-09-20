@@ -2,6 +2,12 @@ var sqlite3 = require("sqlite3").verbose()
 var moment = require("moment")
 
 /**
+ * 参考DB教程 https://blog.csdn.net/qq_38081746/article/details/90673681
+ * 参考时间教程 https://blog.csdn.net/shenmohui/article/details/110174272
+ */
+
+
+/**
  * Get the Database
  * @returns Database
  */
@@ -184,9 +190,14 @@ function warning(msg) {
     db.close()
 }
 
+async function get_tops(){
+
+}
+
 module.exports = {
     reg: reg,
     add: add,
     del: del,
+    get_tops:get_tops,
     warning: warning
 }
