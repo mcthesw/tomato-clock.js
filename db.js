@@ -1,4 +1,5 @@
 var sqlite3 = require("sqlite3").verbose()
+var moment = require("moment")
 
 function get_DB() {
     let db = new sqlite3.Database("Data.db", function (err) {
@@ -28,7 +29,7 @@ get_by_name = async function (name) {
 }
 
 
-async function reg(name, pwd) {
+async function reg(name, ip, pwd) {
     // register a user by name and password
     let db = get_DB()
     let sql = "SELECT * FROM UserData WHERE NAME = $name"
@@ -40,41 +41,74 @@ async function reg(name, pwd) {
                     $pwd: pwd
                 },
                 function (result, err) {
-                    // handle err
                     if (err) {
+                        // sql err
+                        log(name,ip,operation="reg",0)
                         throw err
                     } else {
-                        console.log("%s注册成功", name)
+                        log(name,ip,operation="reg",1)
                     }
                 });
     } else {
         // handle err
-        console.log("%s已经被注册", name)
+        log(name,ip,operation="reg",0)
+        console.log("%s has been registered", name)
     }
     db.close()
 }
 
-async function del(name, pwd) {
+async function del(name, ip, pwd) {
     // delete a user by name and password
     let db = get_DB()
 
     db.close()
 }
 
-async function add(name, value, amount) {
+async function add(name, ip, value, amount) {
     // add a user's time,wins or fails
     let db = get_DB()
 
     db.close()
 }
 
-async function log(name, ip, operation, flag) {
+function log(name, ip, operation, flag) {
     // logs
     let db = get_DB()
-
+    time = moment().format('YYYY-MM-DD HH:mm:ss');
+    sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,FLAG) VALUES ($time,$name,$ip,$operation,$flag)"
+    db.run(sql, {
+            $time: time,
+            $name: name,
+            $ip: ip,
+            $operation: operation,
+            $flag: flag
+        },
+        function (err) {
+            if (err) {
+                console.log(err)
+            }
+        })
+    console.log("recoded :%s(%s) did %s in %s, flag = %s", name, ip, operation, time, flag)
     db.close()
 }
 
+function warning(msg){
+    let db = get_DB()
+    time = moment().format('YYYY-MM-DD HH:mm:ss');
+    sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,MSG) VALUES ($time,\"system\",\"0.0.0.0\",\"warning\",$msg)"
+    db.run(sql,{$time:time,$msg:msg},
+        function(err){
+            if (err){
+                console.log("System alert warning in %s, content is %s ,but failed",time,msg)
+                console.log(err)
+            }else{
+                console.log("System alert warning in %s, content is %s",time,msg)
+            }
+        })
+    db.close()
+}
+
+warning("assss")
 
 module.exports = {
     reg: reg,
