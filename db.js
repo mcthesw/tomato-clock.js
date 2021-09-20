@@ -1,6 +1,10 @@
 var sqlite3 = require("sqlite3").verbose()
 var moment = require("moment")
 
+/**
+ * Get the Database
+ * @returns Database
+ */
 function get_DB() {
     let db = new sqlite3.Database("Data.db", function (err) {
         if (err) throw err;
@@ -28,9 +32,13 @@ get_by_name = async function (name) {
     })
 }
 
-
+/**
+ * Register a user by name and password
+ * @param {String} name 
+ * @param {String} ip 
+ * @param {Number} pwd 
+ */
 async function reg(name, ip, pwd) {
-    // register a user by name and password
     let db = get_DB()
     let sql = "SELECT * FROM UserData WHERE NAME = $name"
     user_data = await get_by_name(name)
@@ -71,8 +79,14 @@ async function add(name, ip, value, amount) {
     db.close()
 }
 
+/**
+ * Record log into the database
+ * @param {String} name 
+ * @param {String} ip 
+ * @param {String} operation 
+ * @param {Boolean} flag 0 or 1
+ */
 function log(name, ip, operation, flag) {
-    // logs
     let db = get_DB()
     time = moment().format('YYYY-MM-DD HH:mm:ss');
     sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,FLAG) VALUES ($time,$name,$ip,$operation,$flag)"
@@ -92,6 +106,10 @@ function log(name, ip, operation, flag) {
     db.close()
 }
 
+/** 
+ * Put msg into console and database
+ * @param {String} msg
+*/
 function warning(msg){
     let db = get_DB()
     time = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -108,10 +126,9 @@ function warning(msg){
     db.close()
 }
 
-warning("assss")
-
 module.exports = {
     reg: reg,
     add: add,
-    del: del
+    del: del,
+    warning:warning
 }
