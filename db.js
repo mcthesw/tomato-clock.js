@@ -36,7 +36,7 @@ get_by_name = async function (name) {
  * Register a user by name and password
  * @param {String} name 
  * @param {String} ip 
- * @param {Number} pwd 
+ * @param {String} pwd 
  */
 async function reg(name, ip, pwd) {
     let db = get_DB()
@@ -51,31 +51,86 @@ async function reg(name, ip, pwd) {
                 function (result, err) {
                     if (err) {
                         // sql err
-                        log(name,ip,operation="reg",0)
+                        log(name, ip, "reg", 0)
                         throw err
                     } else {
-                        log(name,ip,operation="reg",1)
+                        log(name, ip, "reg", 1)
                     }
                 });
     } else {
         // handle err
-        log(name,ip,operation="reg",0)
+        log(name, ip, operation = "reg", 0)
         console.log("%s has been registered", name)
     }
     db.close()
 }
 
+/**
+ * Delete a user by name and password
+ * @param {String} name 
+ * @param {String} ip 
+ * @param {String} pwd 
+ */
 async function del(name, ip, pwd) {
-    // delete a user by name and password
     let db = get_DB()
-
+    user = await get_by_name(name)
+    if (user != undefined && user.PWD == pwd) {
+        sql = "DELETE FROM UserData WHERE NAME = $name"
+        db.run(sql, {
+            $name: name
+        }, function (err) {
+            if (err) {
+                log(name, ip, "del", 0)
+                throw err
+            }
+        })
+        log(name, ip, "del", 1)
+    } else {
+        log(name, ip, "del", 0)
+    }
     db.close()
 }
 
-async function add(name, ip, value, amount) {
-    // add a user's time,wins or fails
+/**
+ * Add a user's time,wins or fails
+ * @param {String} name 
+ * @param {String} ip 
+ * @param {String} pwd 
+ * @param {String} value time wins fails
+ * @param {Number} amount 
+ */
+async function add(name, ip, pwd, value, amount) {
     let db = get_DB()
-
+    user = await get_by_name(name)
+    if (user != undefined && user.PWD == pwd) {
+        switch (value) {
+            case "time":
+                sql = "UPDATE UserData SET TIME = $amount WHERE NAME = $name"
+                amount += user.TIME
+                break
+            case "wins":
+                sql = "UPDATE UserData SET WINS = $amount WHERE NAME = $name"
+                amount += user.WINS
+                break
+            case "fails":
+                sql = "UPDATE UserData SET FAILS = $amount WHERE NAME = $name"
+                amount += user.FAILS
+                break
+        }
+        db.run(sql, {
+            $amount: amount,
+            $name: name
+        }, function (err) {
+            if (err) {
+                log(name, ip, "add", 0)
+                throw err
+            }
+        })
+        console.log("recoded :%s(%s) add %s to %s ", name, ip, amount, value)
+        log(name, ip, "add", 1)
+    } else {
+        log(name, ip, "add", 0)
+    }
     db.close()
 }
 
@@ -109,18 +164,21 @@ function log(name, ip, operation, flag) {
 /** 
  * Put msg into console and database
  * @param {String} msg
-*/
-function warning(msg){
+ */
+function warning(msg) {
     let db = get_DB()
     time = moment().format('YYYY-MM-DD HH:mm:ss');
     sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,MSG) VALUES ($time,\"system\",\"0.0.0.0\",\"warning\",$msg)"
-    db.run(sql,{$time:time,$msg:msg},
-        function(err){
-            if (err){
-                console.log("System alert warning in %s, content is %s ,but failed",time,msg)
+    db.run(sql, {
+            $time: time,
+            $msg: msg
+        },
+        function (err) {
+            if (err) {
+                console.log("System alert warning in %s, content is %s ,but failed", time, msg)
                 console.log(err)
-            }else{
-                console.log("System alert warning in %s, content is %s",time,msg)
+            } else {
+                console.log("System alert warning in %s, content is %s", time, msg)
             }
         })
     db.close()
@@ -130,5 +188,5 @@ module.exports = {
     reg: reg,
     add: add,
     del: del,
-    warning:warning
+    warning: warning
 }
