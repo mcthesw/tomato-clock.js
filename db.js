@@ -18,7 +18,7 @@ function get_DB() {
     return db
 }
 
-get_by_name = async function (name) {
+async function get_by_name(name) {
     return new Promise(function (resolve, reject) {
         let db = get_DB()
         let sql = "SELECT * FROM UserData WHERE NAME = $name"
@@ -26,7 +26,8 @@ get_by_name = async function (name) {
                 $name: name
             },
             function (err, row) {
-                if (row != null) {
+                if (row != undefined) {
+                    // undefined may should be null ?
                     // user does exist
                     resolve(row)
                 } else {
@@ -190,8 +191,25 @@ function warning(msg) {
     db.close()
 }
 
+/**
+ * Get top 10(ordered by time)
+ * @returns Array include objects,like [ { NAME: 'Van', TIME: 0 } ]
+ */
 async function get_tops(){
-
+    function get_tops_from_db(){
+        return new Promise(function (resolve,reject){
+            let db = get_DB()
+            let sql = "SELECT NAME,TIME FROM UserData ORDER BY TIME LIMIT 10"
+            db.all(sql,function(err,row){
+                if (row != undefined){
+                    resolve(row)
+                }else{
+                    resolve(null)
+                }
+            })
+        })
+    }
+    return await get_tops_from_db()
 }
 
 module.exports = {
