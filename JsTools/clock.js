@@ -26,7 +26,7 @@ function getTops() {
 function get_name_psw() {
     accountName = document.getElementById("accountName").value
     accountPsw = document.getElementById("accountPsw").value
-    return accountName, accountPsw
+    return [accountName, accountPsw]
 }
 
 function resetTime(){
@@ -203,7 +203,8 @@ function delAccount() {
         return
     }
     console.log("delAccount()")
-    accountName, accountPsw = get_name_psw()
+    accountName=get_name_psw()[0]
+    accountPsw = get_name_psw()[1]
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/del/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {

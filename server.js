@@ -48,7 +48,7 @@ app.get("/reg/*",async function(req,res){
 app.get("/del/*",async function(req,res){
     cur_url = req.url.slice(5)
     cur_name=cur_url.slice(0,cur_url.indexOf("/"))
-    cur_pwd=cur_url.slice(cur_url.indexOf("/"))
+    cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
     ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
     result = await db.del(cur_name,ip,cur_pwd)
     res.status(200).send(result)
@@ -57,7 +57,7 @@ app.get("/del/*",async function(req,res){
 app.get("/getSta/*",async function(req,res){
     cur_url = req.url.slice(8)
     cur_name=cur_url.slice(0,cur_url.indexOf("/"))
-    cur_pwd=cur_url.slice(cur_url.indexOf("/"))
+    cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
     ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
     cur_info = await db.get_by_name(cur_name)
     if(cur_info==null){
