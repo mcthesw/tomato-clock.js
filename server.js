@@ -60,6 +60,10 @@ app.get("/getSta/*",async function(req,res){
     cur_pwd=cur_url.slice(cur_url.indexOf("/"))
     ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
     cur_info = await db.get_by_name(cur_name)
+    if(cur_info==null){
+        res.status(200).send("fail")
+        return
+    }
     if (cur_info.PWD!=cur_pwd){
         result = "fail"
     }else{

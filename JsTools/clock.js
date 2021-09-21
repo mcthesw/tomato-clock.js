@@ -89,18 +89,19 @@ function getStatistics() {
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/getSta/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {
-        res = JSON.parse(xmlhttp.responseText)
-        console.log(res)
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200 && res != "fail") {
-            let wins = document.getElementById("wins")
-            let fails = document.getElementById("fails")
-            let time = document.getElementById("time")
-            wins.innerHTML = "成功次数:" + res.WINS
-            fails.innerHTML = "失败次数:" + res.FAILS
-            time.innerHTML = "完成时间:" + res.TIME
-        }
-        if (res == "fail") {
-            alert("出现错误，请检查密码和账号是否正确\n也可能是服务器问题")
+        res = xmlhttp.responseText
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if(res!="fail"){
+                res = JSON.parse(res)
+                let wins = document.getElementById("wins")
+                let fails = document.getElementById("fails")
+                let time = document.getElementById("time")
+                wins.innerHTML = "成功次数:" + res.WINS
+                fails.innerHTML = "失败次数:" + res.FAILS
+                time.innerHTML = "完成时间:" + res.TIME
+            }else{
+                alert("出现错误，请检查密码和账号是否正确\n也可能是服务器问题")
+            }
         }
     }
     xmlhttp.send()
