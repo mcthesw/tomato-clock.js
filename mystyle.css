@@ -30,7 +30,8 @@ body {
 }
 
 #clockContainer > div{
-    margin-top: 1.5rem;
+    margin-top: 1.3rem;
+    margin-bottom: 1.3rem;
     text-align: center;
     font-size: 5rem;
 
@@ -54,4 +55,18 @@ body {
     top: -0.5rem;
     left: 0.5rem;
     text-shadow: 5px 5px 10px rgba(48, 48, 48, 0.7);
+}
+
+#startButtonContainer{
+    justify-content: center;
+}
+
+#containerButton{
+    width: calc(10rem + 20px);
+    height: calc(3rem + 5px);
+
+    background-color: rgb(217, 217, 217);
+    border-color: rgb(48, 48, 48);
+    box-shadow: 5px 5px 10px 3px rgba(48, 48, 48, 0.7);
+    border-radius: 1rem;
 }
