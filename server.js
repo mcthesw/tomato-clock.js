@@ -39,7 +39,7 @@ app.get("/database/tops",async function(req,res){
 app.get("/reg/*",async function(req,res){
     cur_url = req.url.slice(5)
     cur_name=cur_url.slice(0,cur_url.indexOf("/"))
-    cur_pwd=cur_url.slice(cur_url.indexOf("/"))
+    cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
     ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
     result = await db.reg(cur_name,ip,cur_pwd)
     res.status(200).send(result)
@@ -73,6 +73,18 @@ app.get("/getSta/*",async function(req,res){
     delete result.ID
     res.status(200).send(result)
 })
+
+app.get("/add/*",function(req,res){
+    cur_url = req.url.slice(5)
+    ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
+    data = cur_url.split("/")
+    cur_name= data[0]
+    cur_pwd=data[1]
+    cur_time=data[2]
+    db.add(cur_name,ip,cur_pwd,"time",cur_time)
+    db.add(cur_name,ip,cur_pwd,"wins",1)
+})
+
 
 var server = app.listen(8000,function(){
     var host = server.address().address

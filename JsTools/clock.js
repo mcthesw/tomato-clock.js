@@ -46,6 +46,10 @@ function stopClock() {
     button.innerHTML = "Start"
 }
 
+function userStopClock(){
+    stopClock()
+}
+
 function get_input_times(){
     console.log("startClock()")
     let inputWork = document.getElementById("inputWork").value
@@ -104,8 +108,16 @@ function start_once(work,rest){
         if(totalTime < 1){
             console.log("一轮结束了")
             clearInterval(second_interval)
+
+            accountName, accountPsw = get_name_psw()
+            console.log(accountName)
+            let xmlhttp = getXmlhttp()
+            xmlhttp.open("GET", "/add/" + accountName + "/" + accountPsw+"/"+(workSeconds/60).toString())
+            console.log("GET", "/add/" + accountName + "/" + accountPsw+"/"+(workSeconds/60).toString())
+            console.log("已经发送工作数据")
+            xmlhttp.send()
         }
-    },100)
+    },10)
 }
 
 function start_timer(work,rest,times){
@@ -131,7 +143,7 @@ function startClock() {
     start_timer(InputTimer.Work,InputTimer.Rest,InputTimer.Times)
 
     let button = document.getElementById("wrappedButton")
-    button.onclick = stopClock
+    button.onclick = userStopClock
     console.log("start-->stop")
     button.innerHTML = "Stop"
     console.log("startClock(): 工作 %s 分钟, 休息 %s 分钟, 循环 %s 次", InputTimer.Work, InputTimer.Rest, InputTimer.Times)

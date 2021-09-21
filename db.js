@@ -133,11 +133,6 @@ async function add(name, ip, pwd, value, amount) {
         db.run(sql, {
             $amount: amount,
             $name: name
-        }, function (err) {
-            if (err) {
-                log(name, ip, "add", 0)
-                throw err
-            }
         })
         console.log("recorded :%s(%s) add %s to %s ", name, ip, amount, value)
         log(name, ip, "add", 1)
