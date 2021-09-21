@@ -22,7 +22,7 @@ body {
 }
 
 .container#page1 {
-    height: 100vh;
+    height: 90vh;
 }
 
 #clockContainer{
@@ -122,6 +122,42 @@ input#inputTimes{
 	border:none;
 
     width: 2.5rem;
+    text-align: center;
+
+    border-bottom: 1.5px solid rgb(48, 48, 48);
+}
+
+hr.normal-hr{
+    clear:both;
+    width: 90vw;
+    border-top: 3px solid rgba(48, 48, 48,0.8);
+}
+
+div#midPageContainer{
+    width: 90vw;
+    margin: auto;
+    margin-top: -0.6rem;
+
+    font-size: 0.3rem;
+}
+
+div#accountContainer{
+    float: right;
+}
+
+#accountContainer > button#register {
+    background-color: rgb(48, 48, 48);
+    border-radius: 7px;
+    border:0;
+    color: rgb(217, 217, 217);
+}
+
+div#accountContainer > input{
+    background:none;  
+	outline:none;  
+	border:none;
+
+    width: 4rem;
     text-align: center;
 
     border-bottom: 1.5px solid rgb(48, 48, 48);
