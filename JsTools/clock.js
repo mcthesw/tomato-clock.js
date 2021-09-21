@@ -29,26 +29,6 @@ function get_name_psw() {
     return [accountName, accountPsw]
 }
 
-function resetTime(){
-    clearInterval(second_interval)
-    clearInterval(times_interval)
-    print_time(0,0)
-}
-
-function stopClock() {
-    console.log("stopClock()")
-    document.getElementById("title").innerHTML="Tomato.JS"
-    resetTime()
-
-
-    let button = document.getElementById("wrappedButton")
-    button.onclick = startClock
-    button.innerHTML = "Start"
-}
-
-function userStopClock(){
-    stopClock()
-}
 
 function get_input_times(){
     console.log("startClock()")
@@ -66,12 +46,12 @@ function get_input_times(){
     return {Work:inputWork,Rest:inputRest,Times:inputTimes}
 }
 
-function get_seconds(minutes){
+function minute2seconds(minutes){
     let seconds = minutes * 60
     return seconds
 }
 
-function get_minutes_seconds(seconds){
+function seconds2minute_and_seconds(seconds){
     minutes = (seconds / 60) - ((seconds / 60) % 1)
     seconds = seconds % 60
     return {minutes:minutes,seconds:seconds}
@@ -89,63 +69,14 @@ function print_time(minutes,seconds){
     document.getElementById("clock-4").innerHTML=seconds[1]
 }
 
-function start_once(work,rest){
-    workSeconds = get_seconds(work)
-    restSeconds = get_seconds(rest)
-    totalTime =workSeconds+restSeconds 
-    window.second_interval = setInterval(function(){
-        totalTime--
-        if(totalTime>restSeconds){
-            cur = get_minutes_seconds(totalTime-restSeconds)
-            print_time(cur.minutes,cur.seconds)
-        }else{
-            cur = get_minutes_seconds(totalTime)
-            print_time(cur.minutes,cur.seconds)
-        }
-        if(totalTime==resetTime){
-            alert("工作结束，开始休息")
-        }
-        if(totalTime < 1){
-            console.log("一轮结束了")
-            clearInterval(second_interval)
-
-            accountName=get_name_psw()[0]
-            accountPsw = get_name_psw()[1]
-            console.log(accountName)
-            let xmlhttp = getXmlhttp()
-            xmlhttp.open("GET", "/add/" + accountName + "/" + accountPsw+"/"+(workSeconds/60).toString())
-            console.log("GET", "/add/" + accountName + "/" + accountPsw+"/"+(workSeconds/60).toString())
-            console.log("已经发送工作数据,工作"+workSeconds/60+"分钟")
-            xmlhttp.send()
-        }
-    },10)
-}
-
-function start_timer(work,rest,times){
-    workSeconds = get_seconds(work)
-    restSeconds = get_seconds(rest)
-    totalTime =workSeconds+restSeconds 
-    window.times_interval = setInterval(function(){
-        times--
-        if(times<1){
-            clearInterval(times_interval)
-        }else{
-            start_once(work,rest)
-            console.log("开启新一轮")
-        }
-    },(totalTime+1)*10)
-}
-
 function startClock() {
     InputTimer = get_input_times()
     if(InputTimer=="err"){return}
     document.getElementById("title").innerHTML="Working"
-    start_once(InputTimer.Work,InputTimer.Rest)
-    start_timer(InputTimer.Work,InputTimer.Rest,InputTimer.Times)
+
 
     let button = document.getElementById("wrappedButton")
     button.onclick = userStopClock
-    console.log("start-->stop")
     button.innerHTML = "Stop"
     console.log("startClock(): 工作 %s 分钟, 休息 %s 分钟, 循环 %s 次", InputTimer.Work, InputTimer.Rest, InputTimer.Times)
 }
@@ -154,7 +85,6 @@ function regAccount() {
     console.log("regAccount()")
     accountName=get_name_psw()[0]
     accountPsw = get_name_psw()[1]
-    console.log(accountPsw)
     // need Encryption 需要加密
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/reg/" + accountName + "/" + accountPsw)
