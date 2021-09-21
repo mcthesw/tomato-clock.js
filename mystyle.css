@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'iPix';
+    src: url("/res/font/IPix.ttf");
+}
+
+:root{
+    font-size: calc(0.5em + 1vw);
+}
+
+body {
+    font-family: 'iPix','Sans-serif';
+    background-color: rgb(255, 251, 246);
+}
+
+.titleContainer {
+    margin: auto;
+    margin-top: 2rem;
+}
+
+.titleContainer > h1 {
+    font-size: 5rem;
+}
+
+.container#page1 {
+    height: 100vh;
+}
+
+#clockContainer{
+    justify-content: center;
+}
+
+#clockContainer > div{
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 5rem;
+
+}
+
+#clockContainer > .col-sm-2 > .numberContainer{
+    background-color: rgb(48, 48, 48);
+    color: rgb(217, 217, 217);
+    box-shadow: 5px 5px 10px 3px rgba(48, 48, 48, 0.7);
+
+    border-radius: 1.5rem;
+    width: calc(5rem + 5px);
+
+    position: relative;
+    left: 20%;
+}
+
+#colon{
+    position: relative;
+    background-color: none;
+    top: -0.5rem;
+    left: 0.5rem;
+    text-shadow: 5px 5px 10px rgba(48, 48, 48, 0.7);
+}
