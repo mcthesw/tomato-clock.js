@@ -225,5 +225,6 @@ module.exports = {
     add: add,
     del: del,
     get_tops:get_tops,
-    warning: warning
+    warning: warning,
+    get_by_name:get_by_name
 }

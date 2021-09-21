@@ -54,6 +54,22 @@ app.get("/del/*",async function(req,res){
     res.status(200).send(result)
 })
 
+app.get("/getSta/*",async function(req,res){
+    cur_url = req.url.slice(8)
+    cur_name=cur_url.slice(0,cur_url.indexOf("/"))
+    cur_pwd=cur_url.slice(cur_url.indexOf("/"))
+    ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
+    cur_info = await db.get_by_name(cur_name)
+    if (cur_info.PWD!=cur_pwd){
+        result = "fail"
+    }else{
+        result = cur_info
+    }
+    delete result.PWD
+    delete result.ID
+    res.status(200).send(result)
+})
+
 var server = app.listen(8000,function(){
     var host = server.address().address
     var port = server.address().port
