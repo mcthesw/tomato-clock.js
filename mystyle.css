@@ -32,12 +32,13 @@ body {
 #clockContainer > div{
     margin-top: 1.3rem;
     margin-bottom: 2.5rem;
+    margin-left: 1rem;
     text-align: center;
     font-size: 5rem;
 
 }
 
-#clockContainer > .col-sm-2 > .numberContainer{
+#clockContainer > .col-xs-2 > .numberContainer{
     background-color: rgb(48, 48, 48);
     color: rgb(217, 217, 217);
     box-shadow: 5px 5px 10px 3px rgba(48, 48, 48, 0.7);
@@ -46,14 +47,12 @@ body {
     width: calc(5rem + 5px);
 
     position: relative;
-    left: 20%;
 }
 
 #colon{
     position: relative;
     background-color: none;
     top: -0.5rem;
-    left: 0.5rem;
     text-shadow: 5px 5px 10px rgba(48, 48, 48, 0.7);
 }
 
