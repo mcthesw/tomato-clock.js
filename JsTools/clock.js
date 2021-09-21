@@ -4,7 +4,6 @@ function getXmlhttp() {
     return xmlhttp
 }
 
-
 function getTops() {
     console.log("getTops()")
     let xmlhttp = getXmlhttp()
@@ -32,13 +31,15 @@ function get_name_psw() {
 
 function stopClock() {
     console.log("stopClock()")
+    clearInterval(set)
+    print_time(0,0)
 
     let button = document.getElementById("wrappedButton")
     button.onclick = startClock
     button.innerHTML = "Start"
 }
 
-function startClock() {
+function get_input_times(){
     console.log("startClock()")
     let inputWork = document.getElementById("inputWork").value
     let inputRest = document.getElementById("inputRest").value
@@ -50,14 +51,55 @@ function startClock() {
             alert("输入数字有误，请不要输入正整数以外的数字")
         }
     }
+    return {Work:inputWork,Rest:inputRest,Times:inputTimes}
+}
 
+function get_seconds(minutes){
+    let seconds = minutes * 60
+    return seconds
+}
+
+function get_minutes_seconds(seconds){
+    minutes = (seconds / 60) - ((seconds / 60) % 1)
+    seconds = seconds % 60
+    return {minutes:minutes,seconds:seconds}
+}
+
+function print_time(minutes,seconds){
+    minutes = minutes.toString()
+    if(minutes.length<2){minutes="0"+minutes}
+    document.getElementById("clock-1").innerHTML=minutes[0]
+    document.getElementById("clock-2").innerHTML=minutes[1]
+
+    seconds = seconds.toString()
+    if(seconds.length<2){seconds="0"+seconds}
+    document.getElementById("clock-3").innerHTML=seconds[0]
+    document.getElementById("clock-4").innerHTML=seconds[1]
+}
+
+function timer(seconds){
+    //global
+    window.set = setInterval(function(){
+        seconds--;
+        minutes_times = get_minutes_seconds(seconds)
+        print_time(minutes_times.minutes,minutes_times.seconds)
+        if(seconds==0){
+            clearInterval(set)
+        }
+    },100)
+}
+
+function startClock() {
+    InputTimer = get_input_times()
+    workSeconds = get_seconds(InputTimer.Work)
+    restSeconds = get_seconds(InputTimer.Rest)
+    timer(workSeconds)
 
     let button = document.getElementById("wrappedButton")
     button.onclick = stopClock
     button.innerHTML = "Stop"
-    console.log("startClock(): 工作 %s 分钟, 休息 %s 分钟, 循环 %s 次", inputWork, inputRest, inputTimes)
+    console.log("startClock(): 工作 %s 分钟, 休息 %s 分钟, 循环 %s 次", InputTimer.Work, InputTimer.Rest, InputTimer.Times)
 }
-
 
 function regAccount() {
     console.log("regAccount()")
