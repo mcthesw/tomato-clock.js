@@ -9,7 +9,6 @@ function getTops() {
     console.log("getTops()")
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/database/tops")
-    xmlhttp.send()
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let tops = document.getElementById("tops")
@@ -22,6 +21,13 @@ function getTops() {
             }
         }
     }
+    xmlhttp.send()
+}
+
+function get_name_psw(){
+    accountName = document.getElementById("accountName").value
+    accountPsw = document.getElementById("accountPsw").value
+    return accountName,accountPsw
 }
 
 function stopClock(){
@@ -55,12 +61,10 @@ function startClock() {
 
 function regAccount() {
     console.log("regAccount()")
-    accountName = document.getElementById("accountName").value
-    accountPsw = document.getElementById("accountPsw").value
+    accountName,accountPsw = get_name_psw()
     // need Encryption 需要加密
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET","/reg/"+accountName+"/"+accountPsw)
-    xmlhttp.send()
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
             switch(xmlhttp.responseText){
@@ -75,15 +79,34 @@ function regAccount() {
             }
         }
     }
+    xmlhttp.send()
 
 }
 
 function getStatistics() {
     console.log("getStatistics()")
+    accountName,accountPsw = get_name_psw()
 }
 
 function delAccount() {
+    if(!window.confirm("注意，如果选择确定将会删除您的账号")){
+        console.log("取消删除账号")
+        return
+    }
     console.log("delAccount()")
+    accountName,accountPsw = get_name_psw()
+    let xmlhttp = getXmlhttp()
+    xmlhttp.open("GET","/del/"+accountName+"/"+accountPsw)
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
+            if(xmlhttp.responseText=="success"){
+                alert("删除账号成功")
+            }else{
+                alert("删除账号失败，请检查账号密码是否正确\n也可能是服务器错误")
+            }
+        }
+    }
+    xmlhttp.send()
 }
 
 window.onload = function () {

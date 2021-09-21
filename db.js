@@ -68,10 +68,11 @@ async function reg(name, ip, pwd) {
         // handle err
         log(name, ip, operation = "reg", 0)
         console.log("%s has been registered", name)
+        db.close()
         return "used name"
     }
-    return "success"
     db.close()
+    return "success"
 }
 
 /**
@@ -94,10 +95,13 @@ async function del(name, ip, pwd) {
             }
         })
         log(name, ip, "del", 1)
+        db.close()
+        return "success"
     } else {
         log(name, ip, "del", 0)
     }
     db.close()
+    return "failed"
 }
 
 /**
@@ -135,7 +139,7 @@ async function add(name, ip, pwd, value, amount) {
                 throw err
             }
         })
-        console.log("recoded :%s(%s) add %s to %s ", name, ip, amount, value)
+        console.log("recorded :%s(%s) add %s to %s ", name, ip, amount, value)
         log(name, ip, "add", 1)
     } else {
         log(name, ip, "add", 0)
@@ -166,7 +170,7 @@ function log(name, ip, operation, flag) {
                 console.log(err)
             }
         })
-    console.log("recoded :%s(%s) did %s in %s, flag = %s", name, ip, operation, time, flag)
+    console.log("recorded :%s(%s) did %s in %s, flag = %s", name, ip, operation, time, flag)
     db.close()
 }
 
