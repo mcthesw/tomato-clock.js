@@ -109,12 +109,13 @@ function start_once(work,rest){
             console.log("一轮结束了")
             clearInterval(second_interval)
 
-            accountName, accountPsw = get_name_psw()
+            accountName=get_name_psw()[0]
+            accountPsw = get_name_psw()[1]
             console.log(accountName)
             let xmlhttp = getXmlhttp()
             xmlhttp.open("GET", "/add/" + accountName + "/" + accountPsw+"/"+(workSeconds/60).toString())
             console.log("GET", "/add/" + accountName + "/" + accountPsw+"/"+(workSeconds/60).toString())
-            console.log("已经发送工作数据")
+            console.log("已经发送工作数据,工作"+workSeconds/60+"分钟")
             xmlhttp.send()
         }
     },10)
@@ -132,7 +133,7 @@ function start_timer(work,rest,times){
             start_once(work,rest)
             console.log("开启新一轮")
         }
-    },(totalTime+1)*100)
+    },(totalTime+1)*10)
 }
 
 function startClock() {
@@ -151,7 +152,9 @@ function startClock() {
 
 function regAccount() {
     console.log("regAccount()")
-    accountName, accountPsw = get_name_psw()
+    accountName=get_name_psw()[0]
+    accountPsw = get_name_psw()[1]
+    console.log(accountPsw)
     // need Encryption 需要加密
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/reg/" + accountName + "/" + accountPsw)
@@ -175,7 +178,8 @@ function regAccount() {
 
 function getStatistics() {
     console.log("getStatistics()")
-    accountName, accountPsw = get_name_psw()
+    accountName=get_name_psw()[0]
+    accountPsw = get_name_psw()[1]
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/getSta/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {

@@ -134,7 +134,7 @@ async function add(name, ip, pwd, value, amount) {
             $amount: amount,
             $name: name
         })
-        console.log("recorded :%s(%s) add %s to %s ", name, ip, amount, value)
+        console.log("recorded :%s(%s) set %s to %s ", name, ip, amount, value)
         log(name, ip, "add", 1)
     } else {
         log(name, ip, "add", 0)

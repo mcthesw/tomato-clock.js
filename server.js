@@ -81,7 +81,7 @@ app.get("/add/*",function(req,res){
     cur_name= data[0]
     cur_pwd=data[1]
     cur_time=data[2]
-    db.add(cur_name,ip,cur_pwd,"time",cur_time)
+    db.add(cur_name,ip,cur_pwd,"time",Number(cur_time))
     db.add(cur_name,ip,cur_pwd,"wins",1)
 })
 
