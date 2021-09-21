@@ -69,6 +69,17 @@ function print_time(minutes,seconds){
     document.getElementById("clock-4").innerHTML=seconds[1]
 }
 
+function stopClock(){
+    let button = document.getElementById("wrappedButton")
+    document.getElementById("title").innerHTML="Tomato.JS"
+    button.innerHTML = "Start"
+    button.onclick = startClock
+}
+
+function userStopClock(){
+    stopClock()
+}
+
 function startClock() {
     InputTimer = get_input_times()
     if(InputTimer=="err"){return}
