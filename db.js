@@ -68,7 +68,9 @@ async function reg(name, ip, pwd) {
         // handle err
         log(name, ip, operation = "reg", 0)
         console.log("%s has been registered", name)
+        return "used name"
     }
+    return "success"
     db.close()
 }
 
@@ -207,9 +209,11 @@ async function get_tops(){
                     resolve(null)
                 }
             })
+            db.close()
         })
     }
-    return await get_tops_from_db()
+    tops = await get_tops_from_db()
+    return tops
 }
 
 module.exports = {

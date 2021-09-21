@@ -151,6 +151,7 @@ div#accountContainer{
     border-radius: 7px;
     border:0;
     color: rgb(217, 217, 217);
+    outline: none;
 }
 
 div#accountContainer > input{
@@ -166,4 +167,21 @@ div#accountContainer > input{
 
 #page2 > .row {
     height: 90vh;
+}
+
+button.midButton{
+    background-color: rgb(48, 48, 48);
+    border-radius: 7px;
+    border:0;
+    color: rgb(217, 217, 217);
+    outline: none;
+
+    margin-bottom: 10px;
+}
+
+button:hover{
+    transform: scale(1.05,1.05);
+}
+button{
+    transition: scale 200ms ease-out;
 }
