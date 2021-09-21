@@ -14,7 +14,7 @@ body {
 
 .titleContainer {
     margin: auto;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .titleContainer > h1 {
@@ -31,7 +31,7 @@ body {
 
 #clockContainer > div{
     margin-top: 1.3rem;
-    margin-bottom: 1.3rem;
+    margin-bottom: 2.5rem;
     text-align: center;
     font-size: 5rem;
 
@@ -64,9 +64,65 @@ body {
 #containerButton{
     width: calc(10rem + 20px);
     height: calc(3rem + 5px);
+    display: flex;
+
+    box-shadow: 5px 5px 10px 3px rgba(48, 48, 48, 0.7);
 
     background-color: rgb(217, 217, 217);
+    border:3px solid rgb(48, 48, 48);
     border-color: rgb(48, 48, 48);
-    box-shadow: 5px 5px 10px 3px rgba(48, 48, 48, 0.7);
     border-radius: 1rem;
+}
+
+button#wrappedButton{
+    width: calc(8rem + 20px);
+    height: calc(3rem + 5px);
+    outline: none;
+
+    background-color: rgb(48, 48, 48);
+    border-radius: 1rem;
+    border:0;
+
+    position: relative;
+    left: -3px;
+    top: -3px;
+
+    font-size: 2rem;
+    color: rgb(217, 217, 217);
+}
+
+input#inputTimes{
+    width: 1.3rem;
+    height: 2.5rem;
+    font-size: 2rem;
+    text-align: center;
+
+    background:none;  
+	outline:none;  
+	border:none;
+
+    position: relative;
+    left: 0.2rem;
+    padding-top: 0.7rem;
+
+    border-bottom: 1.5px solid rgb(48, 48, 48);
+}
+
+#wordContainer{
+    margin: auto;
+    margin-top: 2rem;
+}
+#wordContainer > p{
+    line-height: 1.5rem;
+    font-size: 2rem;
+}
+#wordContainer > p >input{
+    background:none;  
+	outline:none;  
+	border:none;
+
+    width: 2.5rem;
+    text-align: center;
+
+    border-bottom: 1.5px solid rgb(48, 48, 48);
 }
