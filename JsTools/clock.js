@@ -24,6 +24,7 @@ function getTops() {
 }
 
 function get_name_psw() {
+    // need Encryption 需要加密
     accountName = document.getElementById("accountName").value
     accountPsw = document.getElementById("accountPsw").value
     return [accountName, accountPsw]
@@ -185,7 +186,15 @@ function regAccount() {
     console.log("regAccount()")
     accountName = get_name_psw()[0]
     accountPsw = get_name_psw()[1]
-    // need Encryption 需要加密
+    let regPos = /^[A-Za-z0-9_]{4,10}$/
+    if (!regPos.test(accountName) || accountName.length <= 4) {
+        alert("请不要输入英文和数字以外的字符，昵称长度请大于4小于10")
+        return "err"
+    }
+    if(accountPsw.length <= 4){
+        alert("密码长度请大于4")
+        return "err"
+    }
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/reg/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {
