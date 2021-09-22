@@ -30,7 +30,7 @@ function get_name_psw() {
 }
 
 
-function get_input_times(){
+function get_input_times() {
     console.log("startClock()")
     let inputWork = document.getElementById("inputWork").value
     let inputRest = document.getElementById("inputRest").value
@@ -43,58 +43,125 @@ function get_input_times(){
             return "err"
         }
     }
-    return {Work:inputWork,Rest:inputRest,Times:inputTimes}
+    return {
+        Work: inputWork,
+        Rest: inputRest,
+        Times: inputTimes
+    }
 }
 
-function minute2seconds(minutes){
+function minute2seconds(minutes) {
     let seconds = minutes * 60
     return seconds
 }
 
-function seconds2minute_and_seconds(seconds){
+function seconds2minute_and_seconds(seconds) {
     minutes = (seconds / 60) - ((seconds / 60) % 1)
     seconds = seconds % 60
-    return {minutes:minutes,seconds:seconds}
+    return {
+        minutes: minutes,
+        seconds: seconds
+    }
 }
 
-function print_time(minutes,seconds){
+function print_time(minutes, seconds) {
     minutes = minutes.toString()
-    if(minutes.length<2){minutes="0"+minutes}
-    document.getElementById("clock-1").innerHTML=minutes[0]
-    document.getElementById("clock-2").innerHTML=minutes[1]
+    if (minutes.length < 2) {
+        minutes = "0" + minutes
+    }
+    document.getElementById("clock-1").innerHTML = minutes[0]
+    document.getElementById("clock-2").innerHTML = minutes[1]
 
     seconds = seconds.toString()
-    if(seconds.length<2){seconds="0"+seconds}
-    document.getElementById("clock-3").innerHTML=seconds[0]
-    document.getElementById("clock-4").innerHTML=seconds[1]
+    if (seconds.length < 2) {
+        seconds = "0" + seconds
+    }
+    document.getElementById("clock-3").innerHTML = seconds[0]
+    document.getElementById("clock-4").innerHTML = seconds[1]
 }
 
-function stopClock(){
+function userStopClock() {
+    startNormalState()
+    clearInterval(window.timer)
+    startNormalState()
+    console.log("番茄钟结束")
+}
+
+function startWorkState() {
+    document.getElementById("title").innerHTML = "Working"
     let button = document.getElementById("wrappedButton")
-    document.getElementById("title").innerHTML="Tomato.JS"
+    button.onclick = userStopClock
+    button.innerHTML = "Stop"
+}
+
+function startRestState() {
+    document.getElementById("title").innerHTML = "Resting"
+    let button = document.getElementById("wrappedButton")
+    button.onclick = userStopClock
+    button.innerHTML = "Stop"
+}
+
+function startNormalState() {
+    let button = document.getElementById("wrappedButton")
+    document.getElementById("title").innerHTML = "Tomato.JS"
     button.innerHTML = "Start"
     button.onclick = startClock
 }
 
-function userStopClock(){
-    stopClock()
+var timer = null
+
+function secondTimer(work, rest, times) {
+    workSeconds = minute2seconds(work)
+    restSeconds = minute2seconds(rest)
+    eachTotalSeconds = workSeconds + restSeconds
+    console.log("每次需要运行" + eachTotalSeconds + "秒")
+    totalSeconds = eachTotalSeconds * times
+    console.log("一共需要运行" + totalSeconds + "秒")
+    timer = window.setInterval(
+        function () {
+            curSeconds = totalSeconds % eachTotalSeconds
+            if (totalSeconds < 0) {
+                clearInterval(window.timer)
+                startNormalState()
+                console.log("番茄钟结束")
+                alert("番茄钟结束")
+            }
+            if (curSeconds == 0 && totalSeconds > 0) {
+                console.log("开启新一轮")
+                curSeconds = eachTotalSeconds
+                alert("开始工作")
+                startWorkState()
+            }
+            if (curSeconds > restSeconds) {
+                minutes_seconds = seconds2minute_and_seconds(curSeconds - restSeconds)
+                print_time(minutes_seconds.minutes, minutes_seconds.seconds)
+            }
+            if (curSeconds == restSeconds) {
+                console.log("进入休息")
+                alert("休息时间")
+                startRestState()
+            }
+            if (curSeconds < restSeconds) {
+                minutes_seconds = seconds2minute_and_seconds(curSeconds)
+                print_time(minutes_seconds.minutes, minutes_seconds.seconds)
+            }
+            totalSeconds--
+        }, 100)
 }
 
 function startClock() {
     InputTimer = get_input_times()
-    if(InputTimer=="err"){return}
-    document.getElementById("title").innerHTML="Working"
-
-
-    let button = document.getElementById("wrappedButton")
-    button.onclick = userStopClock
-    button.innerHTML = "Stop"
+    if (InputTimer == "err") {
+        return
+    }
+    startWorkState()
+    secondTimer(InputTimer.Work, InputTimer.Rest, InputTimer.Times)
     console.log("startClock(): 工作 %s 分钟, 休息 %s 分钟, 循环 %s 次", InputTimer.Work, InputTimer.Rest, InputTimer.Times)
 }
 
 function regAccount() {
     console.log("regAccount()")
-    accountName=get_name_psw()[0]
+    accountName = get_name_psw()[0]
     accountPsw = get_name_psw()[1]
     // need Encryption 需要加密
     let xmlhttp = getXmlhttp()
@@ -119,14 +186,14 @@ function regAccount() {
 
 function getStatistics() {
     console.log("getStatistics()")
-    accountName=get_name_psw()[0]
+    accountName = get_name_psw()[0]
     accountPsw = get_name_psw()[1]
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/getSta/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {
         res = xmlhttp.responseText
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            if(res!="fail"){
+            if (res != "fail") {
                 res = JSON.parse(res)
                 let wins = document.getElementById("wins")
                 let fails = document.getElementById("fails")
@@ -134,7 +201,7 @@ function getStatistics() {
                 wins.innerHTML = "成功次数:" + res.WINS
                 fails.innerHTML = "失败次数:" + res.FAILS
                 time.innerHTML = "完成时间:" + res.TIME
-            }else{
+            } else {
                 alert("出现错误，请检查密码和账号是否正确\n也可能是服务器问题")
             }
         }
@@ -148,7 +215,7 @@ function delAccount() {
         return
     }
     console.log("delAccount()")
-    accountName=get_name_psw()[0]
+    accountName = get_name_psw()[0]
     accountPsw = get_name_psw()[1]
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/del/" + accountName + "/" + accountPsw)
