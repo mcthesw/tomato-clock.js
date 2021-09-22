@@ -80,10 +80,31 @@ function print_time(minutes, seconds) {
     document.getElementById("clock-4").innerHTML = seconds[1]
 }
 
+function sendSuccessWork(work){
+    console.log("正在向服务器汇报工作时间")
+    accountName= get_name_psw()[0]
+    accountPsw=get_name_psw()[1]
+    let xmlhttp= getXmlhttp()
+    xmlhttp.open("GET", "/add/"+ accountName + "/" + accountPsw+"/"+work)
+    xmlhttp.send()
+}
+
+function sendFailureWork(){
+    console.log("正在向服务器汇报失败次数")
+    accountName= get_name_psw()[0]
+    accountPsw=get_name_psw()[1]
+    let xmlhttp= getXmlhttp()
+    xmlhttp.open("GET", "/fail/"+ accountName + "/" + accountPsw)
+    xmlhttp.send()
+}
+
 function userStopClock() {
     startNormalState()
     clearInterval(window.timer)
     startNormalState()
+    print_time(0,0)
+    sendFailureWork()
+    alert("你放弃了这次番茄钟")
     console.log("番茄钟结束")
 }
 
@@ -137,6 +158,7 @@ function secondTimer(work, rest, times) {
                 print_time(minutes_seconds.minutes, minutes_seconds.seconds)
             }
             if (curSeconds == restSeconds) {
+                sendSuccessWork(work)
                 console.log("进入休息")
                 alert("休息时间")
                 startRestState()
@@ -146,7 +168,7 @@ function secondTimer(work, rest, times) {
                 print_time(minutes_seconds.minutes, minutes_seconds.seconds)
             }
             totalSeconds--
-        }, 100)
+        }, 1000)
 }
 
 function startClock() {

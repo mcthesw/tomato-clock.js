@@ -40,7 +40,7 @@ app.get("/reg/*",async function(req,res){
     cur_url = req.url.slice(5)
     cur_name=cur_url.slice(0,cur_url.indexOf("/"))
     cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
-    ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
+    ip = req.ip
     result = await db.reg(cur_name,ip,cur_pwd)
     res.status(200).send(result)
 })
@@ -49,7 +49,7 @@ app.get("/del/*",async function(req,res){
     cur_url = req.url.slice(5)
     cur_name=cur_url.slice(0,cur_url.indexOf("/"))
     cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
-    ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
+    ip = req.ip
     result = await db.del(cur_name,ip,cur_pwd)
     res.status(200).send(result)
 })
@@ -58,7 +58,7 @@ app.get("/getSta/*",async function(req,res){
     cur_url = req.url.slice(8)
     cur_name=cur_url.slice(0,cur_url.indexOf("/"))
     cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
-    ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
+    ip = req.ip
     cur_info = await db.get_by_name(cur_name)
     if(cur_info==null){
         res.status(200).send("fail")
@@ -76,13 +76,22 @@ app.get("/getSta/*",async function(req,res){
 
 app.get("/add/*",function(req,res){
     cur_url = req.url.slice(5)
-    ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
+    ip = req.ip
     data = cur_url.split("/")
     cur_name= data[0]
     cur_pwd=data[1]
     cur_time=data[2]
     db.add(cur_name,ip,cur_pwd,"time",Number(cur_time))
     db.add(cur_name,ip,cur_pwd,"wins",1)
+})
+
+app.get("/fail/*",function(req,res){
+    cur_url = req.url.slice(6)
+    ip = req.ip
+    data = cur_url.split("/")
+    cur_name= data[0]
+    cur_pwd=data[1]
+    db.add(cur_name,ip,cur_pwd,"fails",1)
 })
 
 
