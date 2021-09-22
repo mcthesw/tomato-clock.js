@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "description": "a simple TamatoClock",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Sworld",
   "license": "ISC",
   "dependencies": {

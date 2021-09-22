@@ -5,7 +5,7 @@
 这是一个开放源代码的番茄钟
 
 ## 部署方法
-首先将所有文件下载到你的服务器或者电脑，然后安装最新版的Nods.JS和NPM（一般会附带安装好），在当前文件夹打开命令行，执行`npm install`下载依赖，最后运行`node server.js`即可，服务器默认开在localhost:8000，如果需要更改请到server.js的文件底端
+首先将所有文件下载到你的服务器或者电脑，然后安装最新版的Nods.JS和NPM（一般会附带安装好），在当前文件夹打开命令行，执行`npm install`下载依赖，最后运行`npm start`即可，服务器默认开在localhost:8000，如果需要更改请到server.js的文件底端
 ```
 var server = app.listen(8000,function(){
     var host = server.address().address
