@@ -200,7 +200,7 @@ async function get_tops(){
     function get_tops_from_db(){
         return new Promise(function (resolve,reject){
             let db = get_DB()
-            let sql = "SELECT NAME,TIME FROM UserData ORDER BY TIME LIMIT 10"
+            let sql = "SELECT NAME,TIME FROM UserData ORDER BY TIME LIMIT 10 DESC"
             db.all(sql,function(err,row){
                 if (row != undefined){
                     resolve(row)

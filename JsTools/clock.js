@@ -30,7 +30,10 @@ function get_name_psw() {
     return [accountName, accountPsw]
 }
 
-
+/**
+ *Get inputs
+ * @return {object} include Work,Rest,Times
+ */
 function get_input_times() {
     console.log("startClock()")
     let inputWork = document.getElementById("inputWork").value
@@ -64,7 +67,12 @@ function seconds2minute_and_seconds(seconds) {
         seconds: seconds
     }
 }
-
+/**
+ *Show the time 
+ *
+ * @param {number} minutes
+ * @param {number} seconds
+ */
 function print_time(minutes, seconds) {
     minutes = minutes.toString()
     if (minutes.length < 2) {
@@ -81,21 +89,21 @@ function print_time(minutes, seconds) {
     document.getElementById("clock-4").innerHTML = seconds[1]
 }
 
-function sendSuccessWork(work){
+function sendSuccessWork(work) {
     console.log("正在向服务器汇报工作时间")
-    accountName= get_name_psw()[0]
-    accountPsw=get_name_psw()[1]
-    let xmlhttp= getXmlhttp()
-    xmlhttp.open("GET", "/add/"+ accountName + "/" + accountPsw+"/"+work)
+    accountName = get_name_psw()[0]
+    accountPsw = get_name_psw()[1]
+    let xmlhttp = getXmlhttp()
+    xmlhttp.open("GET", "/add/" + accountName + "/" + accountPsw + "/" + work)
     xmlhttp.send()
 }
 
-function sendFailureWork(){
+function sendFailureWork() {
     console.log("正在向服务器汇报失败次数")
-    accountName= get_name_psw()[0]
-    accountPsw=get_name_psw()[1]
-    let xmlhttp= getXmlhttp()
-    xmlhttp.open("GET", "/fail/"+ accountName + "/" + accountPsw)
+    accountName = get_name_psw()[0]
+    accountPsw = get_name_psw()[1]
+    let xmlhttp = getXmlhttp()
+    xmlhttp.open("GET", "/fail/" + accountName + "/" + accountPsw)
     xmlhttp.send()
 }
 
@@ -103,7 +111,7 @@ function userStopClock() {
     startNormalState()
     clearInterval(window.timer)
     startNormalState()
-    print_time(0,0)
+    print_time(0, 0)
     sendFailureWork()
     alert("你放弃了这次番茄钟")
     console.log("番茄钟结束")
@@ -132,6 +140,13 @@ function startNormalState() {
 
 var timer = null
 
+/**
+ *The most important function.
+ *It will create an interval to manage the clock
+ * @param {number} work
+ * @param {number} rest
+ * @param {number} times
+ */
 function secondTimer(work, rest, times) {
     workSeconds = minute2seconds(work)
     restSeconds = minute2seconds(rest)
@@ -171,7 +186,10 @@ function secondTimer(work, rest, times) {
             totalSeconds--
         }, 1000)
 }
-
+/**
+ *The function that band to the start button.
+ *It will call function "secondTimer"
+ */
 function startClock() {
     InputTimer = get_input_times()
     if (InputTimer == "err") {
@@ -181,7 +199,11 @@ function startClock() {
     secondTimer(InputTimer.Work, InputTimer.Rest, InputTimer.Times)
     console.log("startClock(): 工作 %s 分钟, 休息 %s 分钟, 循环 %s 次", InputTimer.Work, InputTimer.Rest, InputTimer.Times)
 }
-
+/**
+ *Register an account.
+ *Name & Psw are from the HTML input.
+ * @return {string} error message 
+ */
 function regAccount() {
     console.log("regAccount()")
     accountName = get_name_psw()[0]
@@ -191,7 +213,7 @@ function regAccount() {
         alert("请不要输入英文和数字以外的字符，昵称长度请大于4小于10")
         return "err"
     }
-    if(accountPsw.length <= 4){
+    if (accountPsw.length <= 4) {
         alert("密码长度请大于4")
         return "err"
     }
@@ -214,7 +236,9 @@ function regAccount() {
     xmlhttp.send()
 
 }
-
+/**
+ *Get your score
+ */
 function getStatistics() {
     console.log("getStatistics()")
     accountName = get_name_psw()[0]
@@ -239,7 +263,9 @@ function getStatistics() {
     }
     xmlhttp.send()
 }
-
+/**
+ *Delete a account.
+ */
 function delAccount() {
     if (!window.confirm("注意，如果选择确定将会删除您的账号")) {
         console.log("取消删除账号")
