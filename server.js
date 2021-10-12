@@ -1,72 +1,74 @@
-var db = require("./db")
-var fs = require("fs")
-var path = require("path")
-var express = require("express")
-var app = express()
+// const
+const port = 8000;
+
+const db = require("./db");
+const path = require("path");
+const express = require("express");
+const app = express();
 
 //index
-app.get("/",function(req,res){
-    indexPath = path.resolve("index.html")
+app.get("/", function (req, res) {
+    let indexPath = path.resolve("index.html")
     res.status(200).sendFile(indexPath)
     //log here
 })
 
 // get the js files
-app.get("/JsTools/*",function(req,res){
-    jsName = req.url.slice(1)
-    jsPath = path.resolve(jsName)
+app.get("/JsTools/*", function (req, res) {
+    let jsName = req.url.slice(1)
+    let jsPath = path.resolve(jsName)
     res.status(200).sendFile(jsPath)
 })
 
 // get res
-app.get("/res/*",function(req,res){
-    fileName = req.url.slice(1)
-    filePath = path.resolve(fileName)
+app.get("/res/*", function (req, res) {
+    let fileName = req.url.slice(1)
+    let filePath = path.resolve(fileName)
     res.status(200).sendFile(filePath)
 })
 
 // get css
-app.get("/mystyle.css",function(req,res){
-    cssPath = path.resolve("mystyle.css")
+app.get("/mystyle.css", function (req, res) {
+    let cssPath = path.resolve("mystyle.css")
     res.status(200).sendFile(cssPath)
 })
 
-app.get("/database/tops",async function(req,res){
-    tops = await db.get_tops()
+app.get("/database/tops", async function (req, res) {
+    let tops = await db.get_tops()
     res.status(200).send(tops)
 })
 
-app.get("/reg/*",async function(req,res){
-    cur_url = req.url.slice(5)
-    cur_name=cur_url.slice(0,cur_url.indexOf("/"))
-    cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
-    ip = req.ip
-    result = await db.reg(cur_name,ip,cur_pwd)
+app.get("/reg/*", async function (req, res) {
+    let cur_url = req.url.slice(5)
+    let cur_name = cur_url.slice(0, cur_url.indexOf("/"))
+    let cur_pwd = cur_url.slice(cur_url.indexOf("/") + 1)
+    let ip = req.ip
+    let result = await db.reg(cur_name, ip, cur_pwd)
     res.status(200).send(result)
 })
 
-app.get("/del/*",async function(req,res){
-    cur_url = req.url.slice(5)
-    cur_name=cur_url.slice(0,cur_url.indexOf("/"))
-    cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
-    ip = req.ip
-    result = await db.del(cur_name,ip,cur_pwd)
+app.get("/del/*", async function (req, res) {
+    let cur_url = req.url.slice(5)
+    let cur_name = cur_url.slice(0, cur_url.indexOf("/"))
+    let cur_pwd = cur_url.slice(cur_url.indexOf("/") + 1)
+    let ip = req.ip
+    let result = await db.del(cur_name, ip, cur_pwd)
     res.status(200).send(result)
 })
 
-app.get("/getSta/*",async function(req,res){
-    cur_url = req.url.slice(8)
-    cur_name=cur_url.slice(0,cur_url.indexOf("/"))
-    cur_pwd=cur_url.slice(cur_url.indexOf("/")+1)
-    ip = req.ip
-    cur_info = await db.get_by_name(cur_name)
-    if(cur_info==null){
+app.get("/getSta/*", async function (req, res) {
+    let cur_url = req.url.slice(8)
+    let cur_name = cur_url.slice(0, cur_url.indexOf("/"))
+    let cur_pwd = cur_url.slice(cur_url.indexOf("/") + 1)
+    let cur_info = await db.get_by_name(cur_name)
+    if (cur_info == null) {
         res.status(200).send("fail")
         return
     }
-    if (cur_info.PWD!=cur_pwd){
+    let result;
+    if (cur_info.PWD !== cur_pwd) {
         result = "fail"
-    }else{
+    } else {
         result = cur_info
     }
     delete result.PWD
@@ -74,30 +76,29 @@ app.get("/getSta/*",async function(req,res){
     res.status(200).send(result)
 })
 
-app.get("/add/*",function(req,res){
-    cur_url = req.url.slice(5)
-    ip = req.ip
-    data = cur_url.split("/")
-    cur_name= data[0]
-    cur_pwd=data[1]
-    cur_time=data[2]
-    db.add(cur_name,ip,cur_pwd,"time",Number(cur_time))
-    db.add(cur_name,ip,cur_pwd,"wins",1)
+app.get("/add/*", function (req, res) {
+    let cur_url = req.url.slice(5)
+    let ip = req.ip
+    let data = cur_url.split("/")
+    let cur_name = data[0]
+    let cur_pwd = data[1]
+    let cur_time = data[2]
+    db.add(cur_name, ip, cur_pwd, "time", Number(cur_time))
+    db.add(cur_name, ip, cur_pwd, "wins", 1)
 })
 
-app.get("/fail/*",function(req,res){
-    cur_url = req.url.slice(6)
-    ip = req.ip
-    data = cur_url.split("/")
-    cur_name= data[0]
-    cur_pwd=data[1]
-    db.add(cur_name,ip,cur_pwd,"fails",1)
+app.get("/fail/*", function (req, res) {
+    let cur_url = req.url.slice(6)
+    let ip = req.ip
+    let data = cur_url.split("/")
+    let cur_name = data[0]
+    let cur_pwd = data[1]
+    db.add(cur_name, ip, cur_pwd, "fails", 1)
 })
 
+const server = app.listen(port, function () {
+    let host = server.address().address;
+    let port = server.address().port;
 
-var server = app.listen(8000,function(){
-    var host = server.address().address
-    var port = server.address().port
-
-    console.log("番茄钟正运行在 http://%s:%s",host,port)
-})
+    console.log("番茄钟正运行在 http://%s:%s", host, port)
+});
