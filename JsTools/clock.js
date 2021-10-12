@@ -4,6 +4,19 @@ function getXmlhttp() {
     return xmlhttp
 }
 
+function sendData(operation,amount){
+    let name = get_name_psw()[0]
+    let psw = get_name_psw()[1]
+    let xmlhttp = getXmlhttp();
+    let url = "app/?operation="+operation+
+        "&name="+name+
+        "&psw="+psw+
+        "&amount="+amount;
+    xmlhttp.open("GET",url);
+    console.log(url)
+    return xmlhttp
+}
+
 function getTops() {
     console.log("getTops()")
     let xmlhttp = getXmlhttp()
@@ -11,13 +24,13 @@ function getTops() {
     xmlhttp.onreadystatechange = function () {
         let cur_time;
         let cur_name;
+        let res;
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             let tops = document.getElementById("tops")
             tops.innerHTML = ""
             res = JSON.parse(xmlhttp.response)
             for (let i = 0; i < res.length; i++) {
-                cur_name = res[i].NAME
-                cur_time = res[i].TIME
+                ({NAME: cur_name, TIME: cur_time} = res[i]);
                 tops.innerHTML += "<li>" + cur_name + " 一共工作了 " + cur_time + " 分钟</li>"
             }
         }
@@ -43,7 +56,7 @@ function get_input_times() {
     let inputTimes = document.getElementById("inputTimes").value
     let regPos = /(^[1-9]\d*$)/
     let valueList = [inputWork, inputRest, inputTimes]
-    for (i in valueList) {
+    for (let i in valueList) {
         if (!regPos.test(valueList[i])) {
             alert("输入数字有误，请不要输入正整数以外的数字")
             return "err"
@@ -57,12 +70,11 @@ function get_input_times() {
 }
 
 function minute2seconds(minutes) {
-    let seconds = minutes * 60
-    return seconds
+    return minutes * 60
 }
 
 function seconds2minute_and_seconds(seconds) {
-    minutes = (seconds / 60) - ((seconds / 60) % 1)
+    let minutes = (seconds / 60) - ((seconds / 60) % 1)
     seconds = seconds % 60
     return {
         minutes: minutes,
@@ -76,41 +88,34 @@ function seconds2minute_and_seconds(seconds) {
  * @param {number} seconds
  */
 function print_time(minutes, seconds) {
-    minutes = minutes.toString()
-    if (minutes.length < 2) {
-        minutes = "0" + minutes
+    let strMinutes = minutes.toString()
+    if (strMinutes.length < 2) {
+        strMinutes = "0" + strMinutes
     }
-    document.getElementById("clock-1").innerHTML = minutes[0]
-    document.getElementById("clock-2").innerHTML = minutes[1]
+    document.getElementById("clock-1").innerHTML = strMinutes[0]
+    document.getElementById("clock-2").innerHTML = strMinutes[1]
 
-    seconds = seconds.toString()
-    if (seconds.length < 2) {
-        seconds = "0" + seconds
+    let strSeconds = seconds.toString()
+    if (strSeconds.length < 2) {
+        strSeconds = "0" + strSeconds
     }
-    document.getElementById("clock-3").innerHTML = seconds[0]
-    document.getElementById("clock-4").innerHTML = seconds[1]
+    document.getElementById("clock-3").innerHTML = strSeconds[0]
+    document.getElementById("clock-4").innerHTML = strSeconds[1]
 }
 
 function sendSuccessWork(work) {
     console.log("正在向服务器汇报工作时间")
-    accountName = get_name_psw()[0]
-    accountPsw = get_name_psw()[1]
-    let xmlhttp = getXmlhttp()
-    xmlhttp.open("GET", "/add/" + accountName + "/" + accountPsw + "/" + work)
+    let xmlhttp = sendData("addTime",work)
     xmlhttp.send()
 }
 
 function sendFailureWork() {
     console.log("正在向服务器汇报失败次数")
-    accountName = get_name_psw()[0]
-    accountPsw = get_name_psw()[1]
-    let xmlhttp = getXmlhttp()
-    xmlhttp.open("GET", "/fail/" + accountName + "/" + accountPsw)
+    let xmlhttp = sendData("addFails",1)
     xmlhttp.send()
 }
 
 function userStopClock() {
-    startNormalState()
     clearInterval(window.timer)
     startNormalState()
     print_time(0, 0)
@@ -140,7 +145,7 @@ function startNormalState() {
     button.onclick = startClock
 }
 
-var timer = null
+var timer = null;
 
 /**
  *The most important function.
@@ -165,7 +170,7 @@ function secondTimer(work, rest, times) {
                 console.log("番茄钟结束")
                 alert("番茄钟结束")
             }
-            if (curSeconds == 0 && totalSeconds > 0) {
+            if (curSeconds === 0 && totalSeconds > 0) {
                 console.log("开启新一轮")
                 curSeconds = eachTotalSeconds
                 alert("开始工作")
@@ -176,7 +181,7 @@ function secondTimer(work, rest, times) {
                 minutes_seconds = seconds2minute_and_seconds(curSeconds - restSeconds)
                 print_time(minutes_seconds.minutes, minutes_seconds.seconds)
             }
-            if (curSeconds == restSeconds) {
+            if (curSeconds === restSeconds) {
                 sendSuccessWork(work)
                 console.log("进入休息")
                 alert("休息时间")
@@ -187,7 +192,7 @@ function secondTimer(work, rest, times) {
                 print_time(minutes_seconds.minutes, minutes_seconds.seconds)
             }
             totalSeconds--
-        }, 1000)
+        }, 10)
 }
 /**
  *The function that band to the start button.
@@ -195,7 +200,7 @@ function secondTimer(work, rest, times) {
  */
 function startClock() {
     let InputTimer = get_input_times()
-    if (InputTimer == "err") {
+    if (InputTimer === "err") {
         return
     }
     startWorkState()
@@ -223,7 +228,7 @@ function regAccount() {
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/reg/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             switch (xmlhttp.responseText) {
                 case "success":
                     alert("注册成功\n需要使用的话只需要输入账号密码，不需要登陆")
@@ -244,21 +249,19 @@ function regAccount() {
  */
 function getStatistics() {
     console.log("getStatistics()")
-    accountName = get_name_psw()[0]
-    accountPsw = get_name_psw()[1]
+    let accountName = get_name_psw()[0]
+    let accountPsw = get_name_psw()[1]
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/getSta/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {
-        res = xmlhttp.responseText
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            if (res != "fail") {
+        let res = xmlhttp.responseText
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            if (res !== "fail") {
                 res = JSON.parse(res)
-                let wins = document.getElementById("wins")
-                let fails = document.getElementById("fails")
-                let time = document.getElementById("time")
-                wins.innerHTML = "成功次数:" + res.WINS
-                fails.innerHTML = "失败次数:" + res.FAILS
-                time.innerHTML = "完成时间:" + res.TIME
+                let {WINS, TIME, FAILS} = res;
+                document.getElementById("wins").innerHTML = "成功次数:" + WINS
+                document.getElementById("fails").innerHTML = "失败次数:" + FAILS
+                document.getElementById("time").innerHTML = "完成时间:" + TIME
             } else {
                 alert("出现错误，请检查密码和账号是否正确\n也可能是服务器问题")
             }
@@ -280,8 +283,8 @@ function delAccount() {
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/del/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            if (xmlhttp.responseText == "success") {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            if (xmlhttp.responseText === "success") {
                 alert("删除账号成功")
             } else {
                 alert("删除账号失败，请检查账号密码是否正确\n也可能是服务器错误")

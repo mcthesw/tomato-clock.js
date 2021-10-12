@@ -76,24 +76,31 @@ app.get("/getSta/*", async function (req, res) {
     res.status(200).send(result)
 })
 
-app.get("/add/*", function (req, res) {
-    let cur_url = req.url.slice(5)
-    let ip = req.ip
-    let data = cur_url.split("/")
-    let cur_name = data[0]
-    let cur_pwd = data[1]
-    let cur_time = data[2]
-    db.add(cur_name, ip, cur_pwd, "time", Number(cur_time))
-    db.add(cur_name, ip, cur_pwd, "wins", 1)
-})
 
-app.get("/fail/*", function (req, res) {
-    let cur_url = req.url.slice(6)
+
+const parse = require("url").parse
+app.get("/app?*",function (req,res){
+    // noinspection JSCheckFunctionSignatures
+    let user = parse(req.url, true).query
     let ip = req.ip
-    let data = cur_url.split("/")
-    let cur_name = data[0]
-    let cur_pwd = data[1]
-    db.add(cur_name, ip, cur_pwd, "fails", 1)
+    try{
+        switch (user.operation){
+            case "addTime":
+                db.add(user.name,ip,user.psw,"time",Number(user.amount))
+                db.add(user.name,ip,user.psw,"wins",Number(user.amount))
+                break
+            case "addWins":
+                db.add(user.name,ip,user.psw,"wins",Number(user.amount))
+                break
+            case "addFails":
+                db.add(user.name,ip,user.psw,"fails",Number(user.amount))
+                break
+        }
+    }catch (err){
+        res.status(400).send(err);
+        console.log(err);
+    }
+
 })
 
 const server = app.listen(port, function () {
