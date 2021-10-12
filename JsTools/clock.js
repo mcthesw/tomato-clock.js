@@ -9,7 +9,9 @@ function getTops() {
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/database/tops")
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        let cur_time;
+        let cur_name;
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             let tops = document.getElementById("tops")
             tops.innerHTML = ""
             res = JSON.parse(xmlhttp.response)
@@ -25,8 +27,8 @@ function getTops() {
 
 function get_name_psw() {
     // need Encryption 需要加密
-    accountName = document.getElementById("accountName").value
-    accountPsw = document.getElementById("accountPsw").value
+    let accountName = document.getElementById("accountName").value
+    let accountPsw = document.getElementById("accountPsw").value
     return [accountName, accountPsw]
 }
 
@@ -148,15 +150,15 @@ var timer = null
  * @param {number} times
  */
 function secondTimer(work, rest, times) {
-    workSeconds = minute2seconds(work)
-    restSeconds = minute2seconds(rest)
-    eachTotalSeconds = workSeconds + restSeconds
+    let workSeconds = minute2seconds(work)
+    let restSeconds = minute2seconds(rest)
+    let eachTotalSeconds = workSeconds + restSeconds
+    let totalSeconds = eachTotalSeconds * times
     console.log("每次需要运行" + eachTotalSeconds + "秒")
-    totalSeconds = eachTotalSeconds * times
     console.log("一共需要运行" + totalSeconds + "秒")
     timer = window.setInterval(
         function () {
-            curSeconds = totalSeconds % eachTotalSeconds
+            let curSeconds = totalSeconds % eachTotalSeconds
             if (totalSeconds < 0) {
                 clearInterval(window.timer)
                 startNormalState()
@@ -169,6 +171,7 @@ function secondTimer(work, rest, times) {
                 alert("开始工作")
                 startWorkState()
             }
+            let minutes_seconds;
             if (curSeconds > restSeconds) {
                 minutes_seconds = seconds2minute_and_seconds(curSeconds - restSeconds)
                 print_time(minutes_seconds.minutes, minutes_seconds.seconds)
@@ -191,7 +194,7 @@ function secondTimer(work, rest, times) {
  *It will call function "secondTimer"
  */
 function startClock() {
-    InputTimer = get_input_times()
+    let InputTimer = get_input_times()
     if (InputTimer == "err") {
         return
     }
@@ -206,8 +209,8 @@ function startClock() {
  */
 function regAccount() {
     console.log("regAccount()")
-    accountName = get_name_psw()[0]
-    accountPsw = get_name_psw()[1]
+    let accountName = get_name_psw()[0]
+    let accountPsw = get_name_psw()[1]
     let regPos = /^[A-Za-z0-9_]{4,10}$/
     if (!regPos.test(accountName) || accountName.length <= 4) {
         alert("请不要输入英文和数字以外的字符，昵称长度请大于4小于10")
@@ -272,8 +275,8 @@ function delAccount() {
         return
     }
     console.log("delAccount()")
-    accountName = get_name_psw()[0]
-    accountPsw = get_name_psw()[1]
+    let accountName = get_name_psw()[0]
+    let accountPsw = get_name_psw()[1]
     let xmlhttp = getXmlhttp()
     xmlhttp.open("GET", "/del/" + accountName + "/" + accountPsw)
     xmlhttp.onreadystatechange = function () {
