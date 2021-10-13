@@ -1,4 +1,4 @@
-// const
+// const port
 const port = 8000;
 
 const db = require("./db");
@@ -8,29 +8,9 @@ const app = express();
 
 //index
 app.get("/", function (req, res) {
-    let indexPath = path.resolve("index.html")
+    let indexPath = path.resolve("res/html/index.html")
     res.status(200).sendFile(indexPath)
     //log here
-})
-
-// get the js files
-app.get("/JsTools/*", function (req, res) {
-    let jsName = req.url.slice(1)
-    let jsPath = path.resolve(jsName)
-    res.status(200).sendFile(jsPath)
-})
-
-// get res
-app.get("/res/*", function (req, res) {
-    let fileName = req.url.slice(1)
-    let filePath = path.resolve(fileName)
-    res.status(200).sendFile(filePath)
-})
-
-// get css
-app.get("/mystyle.css", function (req, res) {
-    let cssPath = path.resolve("mystyle.css")
-    res.status(200).sendFile(cssPath)
 })
 
 app.get("/database/tops", async function (req, res) {
@@ -102,6 +82,7 @@ app.get("/app?*",function (req,res){
     }
 
 })
+app.use(express.static("res"));
 
 const server = app.listen(port, function () {
     let host = server.address().address;
