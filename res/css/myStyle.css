@@ -1,6 +1,7 @@
+/*noinspection CssUnknownTarget*/
 @font-face {
     font-family: 'iPix';
-    src: url("/res/font/IPix.ttf");
+    src: url("/font/IPix.ttf");
 }
 
 :root{
@@ -8,13 +9,12 @@
 }
 
 body {
-    font-family: 'iPix','Sans-serif';
+    font-family: 'iPix', sans-serif;
     background-color: rgb(255, 251, 246);
 }
 
 .titleContainer {
-    margin: auto;
-    margin-top: 1.5rem;
+    margin: 1.5rem auto auto;
 }
 
 .titleContainer > h1 {
@@ -51,7 +51,7 @@ body {
 
 #colon{
     position: relative;
-    background-color: none;
+    background-color: unset;
     top: -0.5rem;
     text-shadow: 5px 5px 10px rgba(48, 48, 48, 0.7);
 }
@@ -69,7 +69,6 @@ body {
 
     background-color: rgb(217, 217, 217);
     border:3px solid rgb(48, 48, 48);
-    border-color: rgb(48, 48, 48);
     border-radius: 1rem;
 }
 
@@ -104,12 +103,11 @@ input#inputTimes{
     left: 0.2rem;
     padding-top: 0.7rem;
 
-    border-bottom: 1.5px solid rgb(48, 48, 48);
+    border-bottom: 2px solid rgb(48, 48, 48);
 }
 
 #wordContainer{
-    margin: auto;
-    margin-top: 2rem;
+    margin: 2rem auto auto;
 }
 #wordContainer > p{
     line-height: 1.5rem;
@@ -123,7 +121,7 @@ input#inputTimes{
     width: 2.5rem;
     text-align: center;
 
-    border-bottom: 1.5px solid rgb(48, 48, 48);
+    border-bottom: 2px solid rgb(48, 48, 48);
 }
 
 hr.normal-hr{
@@ -134,9 +132,7 @@ hr.normal-hr{
 
 div#midPageContainer{
     width: 90vw;
-    margin: auto;
-    margin-top: -0.6rem;
-    margin-bottom: 5vh;
+    margin: -0.6rem auto 5vh;
 
     font-size: 0.3rem;
 }
@@ -161,7 +157,7 @@ div#accountContainer > input{
     width: 4rem;
     text-align: left;
 
-    border-bottom: 1.5px solid rgb(48, 48, 48);
+    border-bottom: 2px solid rgb(48, 48, 48);
 }
 
 #page2 > .row {

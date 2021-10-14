@@ -66,13 +66,17 @@ app.get("/app?*",function (req,res){
     try{
         switch (user.operation){
             case "addTime":
+                // noinspection JSIgnoredPromiseFromCall
                 db.add(user.name,ip,user.psw,"time",Number(user.amount))
+                // noinspection JSIgnoredPromiseFromCall
                 db.add(user.name,ip,user.psw,"wins",Number(user.amount))
                 break
             case "addWins":
+                // noinspection JSIgnoredPromiseFromCall
                 db.add(user.name,ip,user.psw,"wins",Number(user.amount))
                 break
             case "addFails":
+                // noinspection JSIgnoredPromiseFromCall
                 db.add(user.name,ip,user.psw,"fails",Number(user.amount))
                 break
         }

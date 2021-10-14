@@ -276,7 +276,7 @@ function secondTimer(work, rest, times) {
                 print_time(minutes_seconds.minutes, minutes_seconds.seconds)
             }
             totalSeconds--
-        }, 10)
+        }, 1000)
 }
 
 /**
