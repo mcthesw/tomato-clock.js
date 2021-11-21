@@ -6,12 +6,6 @@ const path = require("path");
 const express = require("express");
 const app = express();
 
-//index
-app.get("/", function (req, res) {
-    let indexPath = path.resolve("res/html/index.html")
-    res.status(200).sendFile(indexPath)
-    //log here
-})
 
 app.get("/database/tops", async function (req, res) {
     let tops = await db.get_tops()
@@ -84,7 +78,11 @@ app.get("/app?*",function (req,res){
         console.log(err);
     }
 })
-app.use(express.static("res"));
+
+// static resources
+app.use(express.static("static/"));
+// webpages
+app.use(express.static("static/html/"));
 
 const server = app.listen(port, function () {
     let host = server.address().address;
