@@ -57,10 +57,9 @@ app.get("/getSta/*", async function (req, res) {
 })
 
 
-
 const parse = require("url").parse
 app.get("/app?*",function (req,res){
-    // noinspection JSCheckFunctionSignatures
+   
     let user = parse(req.url, true).query
     let ip = req.ip
     try{
@@ -80,7 +79,6 @@ app.get("/app?*",function (req,res){
         res.status(400).send(err);
         console.log(err);
     }
-
 })
 app.use(express.static("res"));
 

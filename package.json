@@ -1,7 +1,7 @@
 {
   "name": "tomatoclock",
   "version": "0.0.1",
-  "description": "a simple TamatoClock",
+  "description": "a simple TomatoClock",
   "main": "server.js",
   "author": "Sworld",
   "license": "ISC",
