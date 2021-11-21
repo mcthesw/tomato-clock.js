@@ -18,13 +18,12 @@ function get_DB() {
 }
 
 async function get_by_name(name) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve: (object) => void, reject) {
         let db = get_DB()
         let sql = "SELECT * FROM UserData WHERE NAME = $name"
-       
         db.get(sql, {
-                $name: name
-            },
+            $name: name
+        },
             function (err, row) {
                 if (row !== undefined) {
                     // undefined may should be null ?
@@ -35,7 +34,7 @@ async function get_by_name(name) {
                     resolve(null)
                 }
             });
-       
+
         db.close()
     })
 }
@@ -53,11 +52,11 @@ async function reg(name, ip, pwd) {
     let operation;
     if (user_data == null) {
         sql = "INSERT INTO UserData (NAME,PWD) values ($name,$pwd)"
-       
+
         db.run(sql, {
-                $name: name,
-                $pwd: pwd
-            },
+            $name: name,
+            $pwd: pwd
+        },
             function (result, err) {
                 if (err) {
                     // sql err
@@ -74,7 +73,7 @@ async function reg(name, ip, pwd) {
         db.close()
         return "used name"
     }
-   
+
     db.close()
     return "success"
 }
@@ -91,7 +90,7 @@ async function del(name, ip, pwd) {
     let sql;
     if (user !== undefined && user.PWD === pwd) {
         sql = "DELETE FROM UserData WHERE NAME = $name"
-       
+
         db.run(sql, {
             $name: name
         }, function (err) {
@@ -161,12 +160,12 @@ function log(name, ip, operation, flag) {
     let time = moment().format('YYYY-MM-DD HH:mm:ss');
     let sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,FLAG) VALUES ($time,$name,$ip,$operation,$flag)"
     db.run(sql, {
-            $time: time,
-            $name: name,
-            $ip: ip,
-            $operation: operation,
-            $flag: flag
-        },
+        $time: time,
+        $name: name,
+        $ip: ip,
+        $operation: operation,
+        $flag: flag
+    },
         function (err) {
             if (err) {
                 console.log(err)
@@ -185,9 +184,9 @@ function warning(msg) {
     let time = moment().format('YYYY-MM-DD HH:mm:ss');
     let sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,MSG) VALUES ($time,\"system\",\"0.0.0.0\",\"warning\",$msg)"
     db.run(sql, {
-            $time: time,
-            $msg: msg
-        },
+        $time: time,
+        $msg: msg
+    },
         function (err) {
             if (err) {
                 console.log("System alert warning in %s, content is %s ,but failed", time, msg)
@@ -222,11 +221,11 @@ async function get_tops() {
     return await get_tops_from_db()
 }
 
-module.exports = {
-    reg: reg,
-    add: add,
-    del: del,
-    get_tops: get_tops,
-    warning: warning,
-    get_by_name: get_by_name
+export {
+    reg,
+    add,
+    del,
+    get_tops,
+    warning,
+    get_by_name
 }

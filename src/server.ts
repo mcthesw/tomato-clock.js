@@ -1,9 +1,8 @@
 // const port
 const port = 8000;
 
-const db = require("./db");
-const path = require("path");
-const express = require("express");
+import db = require("./db");
+import express = require("express");
 const app = express();
 
 
@@ -81,8 +80,5 @@ app.use(express.static("static/"));
 app.use(express.static("static/html/"));
 
 const server = app.listen(port, function () {
-    let host = server.address().address;
-    let port = server.address().port;
-
-    console.log("番茄钟正运行在 http://%s:%s", host, port)
+    console.log("番茄钟正运行在 http://%s:%s", "localhost", port)
 });

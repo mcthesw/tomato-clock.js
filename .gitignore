@@ -80,3 +80,10 @@ typings/
 .dynamodb/
 
 sourceRes
+
+.idea
+
+.vscode
+
+db.js
+server.js
