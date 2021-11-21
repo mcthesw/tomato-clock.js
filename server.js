@@ -52,28 +52,24 @@ app.get("/getSta/*", async function (req, res) {
 
 
 const parse = require("url").parse
-app.get("/app?*",function (req,res){
-   
+app.get("/app?*", function (req, res) {
+
     let user = parse(req.url, true).query
     let ip = req.ip
-    try{
-        switch (user.operation){
+    try {
+        switch (user.operation) {
             case "addTime":
-                // noinspection JSIgnoredPromiseFromCall
-                db.add(user.name,ip,user.psw,"time",Number(user.amount))
-                // noinspection JSIgnoredPromiseFromCall
-                db.add(user.name,ip,user.psw,"wins",Number(user.amount))
+                db.add(user.name, ip, user.psw, "time", Number(user.amount))
+                db.add(user.name, ip, user.psw, "wins", Number(user.amount))
                 break
             case "addWins":
-                // noinspection JSIgnoredPromiseFromCall
-                db.add(user.name,ip,user.psw,"wins",Number(user.amount))
+                db.add(user.name, ip, user.psw, "wins", Number(user.amount))
                 break
             case "addFails":
-                // noinspection JSIgnoredPromiseFromCall
-                db.add(user.name,ip,user.psw,"fails",Number(user.amount))
+                db.add(user.name, ip, user.psw, "fails", Number(user.amount))
                 break
         }
-    }catch (err){
+    } catch (err) {
         res.status(400).send(err);
         console.log(err);
     }
