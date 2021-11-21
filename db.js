@@ -71,7 +71,6 @@ async function reg(name, ip, pwd) {
         // handle err
         log(name, ip, operation = "reg", 0)
         console.log("%s has been registered", name)
-       
         db.close()
         return "used name"
     }
@@ -89,7 +88,6 @@ async function reg(name, ip, pwd) {
 async function del(name, ip, pwd) {
     let db = get_DB()
     let user = await get_by_name(name)
-   
     let sql;
     if (user !== undefined && user.PWD === pwd) {
         sql = "DELETE FROM UserData WHERE NAME = $name"
@@ -103,13 +101,11 @@ async function del(name, ip, pwd) {
             }
         })
         log(name, ip, "del", 1)
-       
         db.close()
         return "success"
     } else {
         log(name, ip, "del", 0)
     }
-   
     db.close()
     return "failed"
 }
@@ -125,7 +121,6 @@ async function del(name, ip, pwd) {
 async function add(name, ip, pwd, value, amount) {
     let db = get_DB()
     let user = await get_by_name(name)
-   
     if (user !== undefined && user.PWD === pwd) {
         let sql;
         switch (value) {
@@ -142,7 +137,6 @@ async function add(name, ip, pwd, value, amount) {
                 amount += user.FAILS
                 break
         }
-       
         db.run(sql, {
             $amount: amount,
             $name: name
@@ -152,7 +146,6 @@ async function add(name, ip, pwd, value, amount) {
     } else {
         log(name, ip, "add", 0)
     }
-   
     db.close()
 }
 
@@ -167,7 +160,6 @@ function log(name, ip, operation, flag) {
     let db = get_DB()
     let time = moment().format('YYYY-MM-DD HH:mm:ss');
     let sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,FLAG) VALUES ($time,$name,$ip,$operation,$flag)"
-   
     db.run(sql, {
             $time: time,
             $name: name,
@@ -181,7 +173,6 @@ function log(name, ip, operation, flag) {
             }
         })
     console.log("recorded :%s(%s) did %s in %s, flag = %s", name, ip, operation, time, flag)
-   
     db.close()
 }
 
@@ -193,7 +184,6 @@ function warning(msg) {
     let db = get_DB()
     let time = moment().format('YYYY-MM-DD HH:mm:ss');
     let sql = "INSERT INTO Logs (TIME,NAME,IP,OPERATION,MSG) VALUES ($time,\"system\",\"0.0.0.0\",\"warning\",$msg)"
-   
     db.run(sql, {
             $time: time,
             $msg: msg
@@ -206,7 +196,6 @@ function warning(msg) {
                 console.log("System alert warning in %s, content is %s", time, msg)
             }
         })
-   
     db.close()
 }
 
@@ -219,7 +208,6 @@ async function get_tops() {
         return new Promise(function (resolve, reject) {
             let db = get_DB()
             let sql = "SELECT NAME,TIME FROM UserData ORDER BY TIME DESC LIMIT 10"
-           
             db.all(sql, function (err, row) {
                 if (row !== undefined) {
                     resolve(row)
@@ -227,7 +215,6 @@ async function get_tops() {
                     resolve(null)
                 }
             })
-           
             db.close()
         })
     }
