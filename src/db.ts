@@ -25,7 +25,7 @@ async function get_by_name(name) {
             $name: name
         },
             function (err, row) {
-                if (row !== undefined) {
+                if (row !== undefined && row !== null) {
                     // undefined may should be null ?
                     // user does exist
                     resolve(row)
