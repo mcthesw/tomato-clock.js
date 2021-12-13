@@ -88,7 +88,7 @@ async function del(name, ip, pwd) {
     let db = get_DB()
     let user = await get_by_name(name)
     let sql;
-    if (user !== undefined && user.PWD === pwd) {
+    if (user !== undefined && user !== null && user.PWD === pwd) {
         sql = "DELETE FROM UserData WHERE NAME = $name"
 
         db.run(sql, {
