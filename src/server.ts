@@ -59,7 +59,7 @@ app.get("/app?*", function (req, res) {
         switch (user.operation) {
             case "addTime":
                 db.add(user.name, ip, user.psw, "time", Number(user.amount))
-                db.add(user.name, ip, user.psw, "wins", Number(user.amount))
+                db.add(user.name, ip, user.psw, "wins", 1)
                 break
             case "addWins":
                 db.add(user.name, ip, user.psw, "wins", Number(user.amount))

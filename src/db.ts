@@ -120,7 +120,7 @@ async function del(name, ip, pwd) {
 async function add(name, ip, pwd, value, amount) {
     let db = get_DB()
     let user = await get_by_name(name)
-    if (user !== undefined && user.PWD === pwd) {
+    if (user !== undefined && user !== null && user.PWD === pwd) {
         let sql;
         switch (value) {
             case "time":
@@ -208,7 +208,7 @@ async function get_tops() {
             let db = get_DB()
             let sql = "SELECT NAME,TIME FROM UserData ORDER BY TIME DESC LIMIT 10"
             db.all(sql, function (err, row) {
-                if (row !== undefined) {
+                if (row !== undefined && row !== null) {
                     resolve(row)
                 } else {
                     resolve(null)
